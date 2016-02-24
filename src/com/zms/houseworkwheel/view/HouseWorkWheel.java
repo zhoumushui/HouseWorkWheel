@@ -1,9 +1,12 @@
 package com.zms.houseworkwheel.view;
 
+import java.util.Random;
+
 import com.zms.houseworkwheel.R;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -31,8 +34,9 @@ public class HouseWorkWheel extends RelativeLayout {
 	private int[] laps = { 3, 4, 5, 6 };
 	/** 指针所指向的角度数据 */
 	private int[] angles = { 0, 60, 120, 180, 240, 300 };
-	/** 转盘内容数组 */
-	private String[] arrayHouseWork = { "扫地", "洗衣服", "休息", "做饭", "洗碗", "休息" };
+
+	/** 内容个数 */
+	private int itemCount = 6;
 
 	/** 监听动画状态的监听器 */
 	private AnimationListener animationListener = new AnimationListener() {
@@ -96,8 +100,9 @@ public class HouseWorkWheel extends RelativeLayout {
 
 			@Override
 			public void onClick(View v) {
+
 				int lap = laps[(int) (Math.random() * 4)];
-				int angle = angles[(int) (Math.random() * 6)];
+				int angle = angles[countProbability(arrayProbability)];
 				int degreeIncrease = lap * 360 + angle; // 每次转圈角度增量
 				// 初始化旋转动画
 				RotateAnimation rotateAnimation = new RotateAnimation(
@@ -115,6 +120,72 @@ public class HouseWorkWheel extends RelativeLayout {
 			}
 		});
 
+		int[] arrayCount = { 0, 0, 0, 0, 0, 0 };
+		for (int i = 0; i < 10000; i++) {
+			int temp = countProbability(arrayProbability);
+			switch (temp) {
+			case 0:
+				arrayCount[0]++;
+				break;
+
+			case 1:
+				arrayCount[1]++;
+				break;
+
+			case 2:
+				arrayCount[2]++;
+				break;
+
+			case 3:
+				arrayCount[3]++;
+				break;
+
+			case 4:
+				arrayCount[4]++;
+				break;
+
+			case 5:
+				arrayCount[5]++;
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		Log.v("AZ", arrayCount[0] + "\t" + arrayCount[1] + "\t" + arrayCount[2]
+				+ "\t" + arrayCount[3] + "\t" + arrayCount[4] + "\t"
+				+ arrayCount[5]);
+
+	}
+
+	/** 转盘内容数组 */
+	private String[] arrayHouseWork = { "扫地", "洗衣服", "休息", "做饭", "洗碗", "休息" };
+	/** 概率数组(百分之) */
+	private int[] arrayProbability = { 10, 10, 480, 10, 10, 480 };
+
+	private int countProbability(int[] arrayProbability) {
+		int temNumber = 1 + new Random().nextInt(1000); // 1-1000
+		int returnNumber;
+
+		if (temNumber <= arrayProbability[0]) {
+			returnNumber = 0;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]) {
+			returnNumber = 1;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
+				+ arrayProbability[2]) {
+			returnNumber = 2;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
+				+ arrayProbability[2] + arrayProbability[3]) {
+			returnNumber = 3;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
+				+ arrayProbability[2] + arrayProbability[3]
+				+ arrayProbability[4]) {
+			returnNumber = 4;
+		} else {
+			returnNumber = 5;
+		}
+		return returnNumber;
 	}
 
 }
