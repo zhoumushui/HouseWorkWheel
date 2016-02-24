@@ -111,7 +111,8 @@ public class HouseWorkWheel extends RelativeLayout {
 						degreeStart, degreeStart + degreeIncrease,
 						RotateAnimation.RELATIVE_TO_SELF, 0.5f,
 						RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-				// degreeStart += degreeIncrease; // 将最后的角度赋值给startDegree作为下次转圈的初始角度
+				// degreeStart += degreeIncrease; //
+				// 将最后的角度赋值给startDegree作为下次转圈的初始角度
 				long time = (lap + angle / 360) * ONE_WHEEL_TIME; // 计算动画播放总时间
 				rotateAnimation.setDuration(time); // 设置动画播放时间
 				rotateAnimation.setFillAfter(true); // 设置动画播放完后，停留在最后一帧画面上
@@ -129,7 +130,7 @@ public class HouseWorkWheel extends RelativeLayout {
 	/** 转盘内容数组 */
 	private String[] arrayHouseWork = { "扫地", "洗衣服", "休息", "做饭", "洗碗", "休息" };
 	/** 概率数组(千分之) */
-	private int[] arrayProbability = { 1, 1, 499, 1, 1, 499 };
+	private int[] arrayProbability = { 150, 150, 200, 150, 150, 200 };
 
 	private int countProbability(int[] arrayProbability) {
 		int temNumber = 1 + new Random().nextInt(1000); // 1-1000
