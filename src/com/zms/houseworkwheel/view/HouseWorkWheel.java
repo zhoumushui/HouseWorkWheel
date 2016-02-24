@@ -29,6 +29,8 @@ public class HouseWorkWheel extends RelativeLayout {
 	private static final long ONE_WHEEL_TIME = 500;
 	/** 开始转动时候的角度，初始值为0 */
 	private int degreeStart = 0;
+	/** 记录最后指向的角度 */
+	private int degreeIncrease;
 
 	/** 指针转圈圈数数据源 */
 	private int[] laps = { 3, 4, 5, 6 };
@@ -53,7 +55,7 @@ public class HouseWorkWheel extends RelativeLayout {
 
 		@Override
 		public void onAnimationEnd(Animation animation) {
-			String name = arrayHouseWork[degreeStart % 360 / 60];
+			String name = arrayHouseWork[degreeIncrease % 360 / 60];
 			Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
 		}
 	};
@@ -103,13 +105,13 @@ public class HouseWorkWheel extends RelativeLayout {
 
 				int lap = laps[(int) (Math.random() * 4)];
 				int angle = angles[countProbability(arrayProbability)];
-				int degreeIncrease = lap * 360 + angle; // 每次转圈角度增量
+				degreeIncrease = lap * 360 + angle; // 每次转圈角度增量
 				// 初始化旋转动画
 				RotateAnimation rotateAnimation = new RotateAnimation(
 						degreeStart, degreeStart + degreeIncrease,
 						RotateAnimation.RELATIVE_TO_SELF, 0.5f,
 						RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-				degreeStart += degreeIncrease; // 将最后的角度赋值给startDegree作为下次转圈的初始角度
+				// degreeStart += degreeIncrease; // 将最后的角度赋值给startDegree作为下次转圈的初始角度
 				long time = (lap + angle / 360) * ONE_WHEEL_TIME; // 计算动画播放总时间
 				rotateAnimation.setDuration(time); // 设置动画播放时间
 				rotateAnimation.setFillAfter(true); // 设置动画播放完后，停留在最后一帧画面上
@@ -120,8 +122,43 @@ public class HouseWorkWheel extends RelativeLayout {
 			}
 		});
 
+		// testProbability(10000);
+
+	}
+
+	/** 转盘内容数组 */
+	private String[] arrayHouseWork = { "扫地", "洗衣服", "休息", "做饭", "洗碗", "休息" };
+	/** 概率数组(千分之) */
+	private int[] arrayProbability = { 1, 1, 499, 1, 1, 499 };
+
+	private int countProbability(int[] arrayProbability) {
+		int temNumber = 1 + new Random().nextInt(1000); // 1-1000
+		int returnNumber;
+
+		if (temNumber <= arrayProbability[0]) {
+			returnNumber = 0;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]) {
+			returnNumber = 1;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
+				+ arrayProbability[2]) {
+			returnNumber = 2;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
+				+ arrayProbability[2] + arrayProbability[3]) {
+			returnNumber = 3;
+		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
+				+ arrayProbability[2] + arrayProbability[3]
+				+ arrayProbability[4]) {
+			returnNumber = 4;
+		} else {
+			returnNumber = 5;
+		}
+		Log.v("AZ", returnNumber + "-" + temNumber);
+		return returnNumber;
+	}
+
+	private void testProbability(int times) {
 		int[] arrayCount = { 0, 0, 0, 0, 0, 0 };
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < times; i++) {
 			int temp = countProbability(arrayProbability);
 			switch (temp) {
 			case 0:
@@ -156,36 +193,6 @@ public class HouseWorkWheel extends RelativeLayout {
 		Log.v("AZ", arrayCount[0] + "\t" + arrayCount[1] + "\t" + arrayCount[2]
 				+ "\t" + arrayCount[3] + "\t" + arrayCount[4] + "\t"
 				+ arrayCount[5]);
-
-	}
-
-	/** 转盘内容数组 */
-	private String[] arrayHouseWork = { "扫地", "洗衣服", "休息", "做饭", "洗碗", "休息" };
-	/** 概率数组(百分之) */
-	private int[] arrayProbability = { 10, 10, 480, 10, 10, 480 };
-
-	private int countProbability(int[] arrayProbability) {
-		int temNumber = 1 + new Random().nextInt(1000); // 1-1000
-		int returnNumber;
-
-		if (temNumber <= arrayProbability[0]) {
-			returnNumber = 0;
-		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]) {
-			returnNumber = 1;
-		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
-				+ arrayProbability[2]) {
-			returnNumber = 2;
-		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
-				+ arrayProbability[2] + arrayProbability[3]) {
-			returnNumber = 3;
-		} else if (temNumber <= arrayProbability[0] + arrayProbability[1]
-				+ arrayProbability[2] + arrayProbability[3]
-				+ arrayProbability[4]) {
-			returnNumber = 4;
-		} else {
-			returnNumber = 5;
-		}
-		return returnNumber;
 	}
 
 }
